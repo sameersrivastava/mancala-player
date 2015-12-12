@@ -1,177 +1,110 @@
-//Starter code from https://github.com/lostdecade/simple_canvas_game
 var mancala = (function($){
-	var test_canvas = function(){
+	var mancala_window = function(){
 		// Create the canvas
-		var canvas = document.createElement("canvas");
-		var ctx = canvas.getContext("2d");
+		var canvas = document.createElement("canvas"),
+			ctx = canvas.getContext("2d");
+		//Appened canvas to body
 		canvas.width = $('#container').width();
 		canvas.height = $('#container').width()/4;
 		document.body.appendChild(canvas);
-		var radius = canvas.height * 3 / 16;
-		drawCups();
-		
-		function drawCups() {
+		//Set drawing units and players
+		var canvas_unit = canvas.height / 2,
+			cup_radius = canvas.height * 3 / 16,
+			p1 = 1,
+			p2 = 2,
+			turn = p1,
+			wait = p2,
+			p1_cups = new Array(),
+			p2_cups = new Array(),
+			p1_mancala,
+			p2_mancala;
+
+		//makeBoard data objects
+		makeBoard();
+
+		//actually draw the Board
+		drawBoard();
+
+
+		function makeBoard() {
 			var i, j, w_offset,w_increment, h_offset, h_increment;
-			w_offset = (canvas.width * 3 / 16);
-			w_increment = (canvas.width * 1 / 8);
-			h_offset = (canvas.height * 1 / 4);
-			h_increment = (canvas.height * 1 / 2);
-			ctx.translate(w_offset, h_offset);
-			for(i = 0; i < 2; i += 1) {
-				for(j=0; j < 6; j += 1) {
-					ctx.beginPath();				
-					ctx.arc(0,0,radius*0.9,0,2 * Math.PI);
-					ctx.strokeStyle = "black";
-					ctx.lineWidth = radius * 0.1;
-					ctx.stroke();
-					ctx.translate(w_increment,0);
+			w_offset = (canvas_unit * 3 / 2);
+			w_increment = canvas_unit;
+			h_offset = (canvas_unit / 2);
+			h_increment = canvas_unit;
+			//P1 Cups Bottom
+			for(i=0; i < 6; i += 1) { 
+				p2_cups[i] = {
+					x: w_offset + i * w_increment,h_offset,
+					y: h_offset,
+					radius: cup_radius,
+					rr: cup_radius * cup_radius,
+					line_color: "#000000", //black
+					background_color: "#ffffff",
+					hover_color: "#00ff00",
+					isHovering: false
 				}
-				ctx.translate(-6 * w_increment, h_increment);
 			}
-			ctx.translate(0,-2*h_increment)
+			for(i=0; i < 6; i += 1) { 
+				p1_cups[i] = {
+					x: w_offset + i * w_increment,h_offset,
+					y: h_offset + h_increment,
+					radius: cup_radius,
+					rr: cup_radius * cup_radius,
+					line_color: "#000000", //black
+					background_color: "#ffffff",
+					hover_color: "#00ff00",
+					isHovering: false
+				}
+			}
 		}
-		drawMancalas();
-		function drawMancalas() {
-			//Draw Left Mancala
-			ctx.moveTo(0,0);
-			ctx.lineTo(300,150);
-			ctx.stroke();
-			//Draw Right Mancala
+		function drawBoard() {
+			var i, cup;
+			//Draw cups
+			for(i = 0; i < 6; i += 1){
+				//Draw P1 Cups
+				cup = p1_cups[i];
+				ctx.beginPath();				
+				ctx.arc(cup.x,cup.y,cup.radius*0.9,0,2 * Math.PI);
+				ctx.strokeStyle = "black";
+				ctx.lineWidth = cup.radius * 0.1;
+				ctx.stroke();
+				//Draw P2 cups
+				cup = p2_cups[i];
+				ctx.beginPath();				
+				ctx.arc(cup.x,cup.y,cup.radius*0.9,0,2 * Math.PI);
+				ctx.strokeStyle = "black";
+				ctx.lineWidth = cup.radius * 0.1;
+				ctx.stroke();	
+			}
 		}
+
+
+		// var p1_draw_cups, p2_draw_cups = new Array();
+		// draw_cups();
 		
-
-
-		// // Background image
-		// var bgReady = false;
-		// var bgImage = new Image();
-		// bgImage.onload = function () {
-		// 	bgReady = true;
-		// };
-		// bgImage.src = "images/background.png";
-
-		// // Hero image
-		// var heroReady = false;
-		// var heroImage = new Image();
-		// heroImage.onload = function () {
-		// 	heroReady = true;
-		// };
-		// heroImage.src = "images/hero.png";
-
-		// // Monster image
-		// var monsterReady = false;
-		// var monsterImage = new Image();
-		// monsterImage.onload = function () {
-		// 	monsterReady = true;
-		// };
-		// monsterImage.src = "images/monster.png";
-
-		// // Game objects
-		// var hero = {
-		// 	speed: 256 // movement in pixels per second
-		// };
-		// var monster = {};
-		// var monstersCaught = 0;
-
-		// // Handle keyboard controls
-		// var keysDown = {};
-
-		// addEventListener("keydown", function (e) {
-		// 	keysDown[e.keyCode] = true;
-		// }, false);
-
-		// addEventListener("keyup", function (e) {
-		// 	delete keysDown[e.keyCode];
-		// }, false);
-
-		// // Reset the game when the player catches a monster
-		// var reset = function () {
-		// 	hero.x = canvas.width / 2;
-		// 	hero.y = canvas.height / 2;
-
-		// 	// Throw the monster somewhere on the screen randomly
-		// 	monster.x = 32 + (Math.random() * (canvas.width - 64));
-		// 	monster.y = 32 + (Math.random() * (canvas.height - 64));
-		// };
-
-		// // Update game objects
-		// var update = function (modifier) {
-		// 	if (38 in keysDown) { // Player holding up
-		// 		hero.y -= hero.speed * modifier;
+		// function draw_cups() {
+		// 	var i, j, w_offset,w_increment, h_offset, h_increment;
+		// 	w_offset = (canvas_unit * 3 / 2);
+		// 	w_increment = canvas_unit;
+		// 	h_offset = (canvas_unit / 2);
+		// 	h_increment = canvas_unit;
+		// 	//P1 Cups Bottom
+		// 	for(i=0; i < 2; i++){
+		// 	for(j=0; j < 6; j += 1) { 
+		// 		ctx.beginPath();				
+		// 		ctx.arc(w_offset + j * w_increment,h_offset + i * h_increment,radius*0.9,0,2 * Math.PI);
+		// 		ctx.strokeStyle = "black";
+		// 		ctx.lineWidth = radius * 0.1;
+		// 		ctx.stroke();		
 		// 	}
-		// 	if (40 in keysDown) { // Player holding down
-		// 		hero.y += hero.speed * modifier;
-		// 	}
-		// 	if (37 in keysDown) { // Player holding left
-		// 		hero.x -= hero.speed * modifier;
-		// 	}
-		// 	if (39 in keysDown) { // Player holding right
-		// 		hero.x += hero.speed * modifier;
-		// 	}
-
-		// 	// Are they touching?
-		// 	if (
-		// 		hero.x <= (monster.x + 32)
-		// 		&& monster.x <= (hero.x + 32)
-		// 		&& hero.y <= (monster.y + 32)
-		// 		&& monster.y <= (hero.y + 32)
-		// 	) {
-		// 		++monstersCaught;
-		// 		reset();
-		// 	}
-		// };
-
-		// // Draw everything
-		// var render = function () {
-		// 	if (bgReady) {
-		// 		ctx.drawImage(bgImage, 0, 0);
-		// 	}
-
-		// 	if (heroReady) {
-		// 		ctx.drawImage(heroImage, hero.x, hero.y);
-		// 	}
-
-		// 	if (monsterReady) {
-		// 		ctx.drawImage(monsterImage, monster.x, monster.y);
-		// 	}
-
-		// 	// Score
-		// 	ctx.fillStyle = "rgb(250, 250, 250)";
-		// 	ctx.font = "24px Helvetica";
-		// 	ctx.textAlign = "left";
-		// 	ctx.textBaseline = "top";
-		// 	ctx.fillText("Goblins caught: " + monstersCaught, 32, 32);
-		// };
-
-		// // The main game loop
-		// var main = function () {
-		// 	var now = Date.now();
-		// 	var delta = now - then;
-
-		// 	update(delta / 1000);
-		// 	render();
-
-		// 	then = now;
-
-		// 	// Request to do this again ASAP
-		// 	requestAnimationFrame(main);
-		// };
-
-		// // Cross-browser support for requestAnimationFrame
-		// var w = window;
-		// requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
-
-		// // Let's play this game!
-		// var then = Date.now();
-		// reset();
-		// main();
-
 	},
-	init = function() {
-		test_canvas();
+	main = function() {
+		mancala_window();
 	};
 	return {
-		init: function() {
-			return init();
+		main: function() {
+			return main();
 		}
 	}
 }($));
