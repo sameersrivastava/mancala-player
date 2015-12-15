@@ -12,7 +12,7 @@ var mancala = (function($){
 		var canvas_unit = canvas.height / 2,
 			cup_radius = canvas_unit * 3 / 8,
 			game = new mancala_board(),
-			p1 = new player(1,1,0),
+			p1 = new player(1,0,0), //Num, Kind, Ply
 			p2 = new player(2,1,0),
 			turn = p1,
 			wait = p2,
@@ -81,11 +81,14 @@ var mancala = (function($){
 			}
 			//draw the Board
 			drawBoard();
+			//Make Status
+			$('#container').append('<div id="game-status"></div>');
 			//Make the new game button
 			$('#container').append('<button id="game-button" type="button">Start New Game</button>');
 			$('#game-button').click(function() {
 				new_game();
 			});
+
 
 		}
 		function drawBoard() {
@@ -175,11 +178,11 @@ var mancala = (function($){
 		function continueGame() {
 			if (game.game_over()) {
 				if (game.hasWon(p1.num)) {
-					//P1 Won
+					$('#game-status').text('Player 1 Won');
 				} else if (game.hasWon(p2.num)) {
-					//P2 won
+					$('#game-status').text('Player 2 Won');
 				} else {
-					//
+					$('#game-status').text('Tie Game');
 				}
 				return;
 			}
@@ -223,6 +226,20 @@ var mancala = (function($){
 		function clearCup(cup){
 			var s = canvas_unit / 5;
 			ctx.clearRect(cup.x - s, cup.y - s, 2 * s, 2 * s);
+		}
+		function enable_board(){
+			//Bind buttons to each mancala
+			$('canvas').mousemove(function (event) {
+				var offset = $(this).offset(),
+					mouseX, mouseY;
+				mouseX = parseInt(event.pageX - offset.left);
+				mouseY = parseInt(event.pageY - offset.top);
+				if (turn.num == 1) { //Only check bottom ones
+					
+				} else {
+
+				}
+			});		
 		}
 	},
 //=================Main function==========================
@@ -318,8 +335,9 @@ var mancala = (function($){
 				return true;
 			}
 			//Capturing
-			if (cups == init_cups && cups[cup - 2] == 1){
+			if ((cups == init_cups) && (cups[cup - 2] === 1)){
 				this.scoreCups[player.num - 1] += opp_cups[this.NCUPS - cup + 1];
+				opp_cups[this.NCUPS - cup + 1] = 0;
 				this.scoreCups[player.num - 1] += 1;
 				cups[cup - 2] = 0;
 			}
