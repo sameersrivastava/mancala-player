@@ -38,7 +38,7 @@ var mancala = (function($){
 					rr: cup_radius * cup_radius,
 					line_color: "#000000", //black
 					background_color: "#000000",
-					hover_color: "#00ff00",
+					hover_color: "#29B962",
 					is_hovering: false
 				}
 			}
@@ -51,7 +51,7 @@ var mancala = (function($){
 					rr: cup_radius * cup_radius,
 					line_color: "#000000", //black
 					background_color: "#000000",
-					hover_color: "#00ff00",
+					hover_color: "#29B962",
 					is_hovering: false
 				}
 			}
@@ -229,7 +229,17 @@ var mancala = (function($){
 		}
 		function enable_board(){
 			//Bind buttons to each mancala
-			$('canvas').mousemove(function (event) {
+			var selection = function(move){
+				$('canvas').unbind('click',selection);
+				$('canvas').unbind('mousemove',enable);		
+				var playAgain = game.makeMove(turn, move);
+				if (!playAgain){
+					swap_turns();
+				}
+				resetStones();
+				setTimeout(continueGame,1000);
+			},
+			enable = function (event) {
 				var offset = $(this).offset(),
 					mouseX, mouseY,
 					cup_x, cup_y,
@@ -239,7 +249,9 @@ var mancala = (function($){
 				if (turn.num == 1) { //Only check bottom ones
 					cup_index = Math.floor(mouseX/canvas_unit) - 1;
 					//console.log(cup_index);
-					if((-1 < cup_index) && (cup_index < 6)){
+					if((-1 < cup_index) &&
+					 	(cup_index < 6) && 
+					 	(game.P1Cups[cup_index] > 0)){
 						cup_x = Math.floor(mouseX / canvas_unit) * canvas_unit + canvas_unit / 2;
 						cup_y = canvas_unit * 1.5;
 						dx = mouseX - cup_x;
@@ -252,6 +264,7 @@ var mancala = (function($){
 								p1_draw_cups[cup_index].is_hovering=true;
 								draw_circle(p1_draw_cups[cup_index]);
 							}
+							$('canvas').click(selection(cup_index));
 						} else {
 							// change to blurcolor if previously inside
 							for(var i = 0; i < p1_draw_cups.length; i++){
@@ -261,18 +274,19 @@ var mancala = (function($){
 									
 								}
 							}
+							$('canvas').unbind('click',selection);
 						}
 					}
 				} else {
 
 				}
-			});		
+			}
+			$('canvas').mousemove(enable);		
 		}
 		function draw_circle(cup){
 			ctx.beginPath();				
 			ctx.arc(cup.x,cup.y,cup.radius*0.9,0,2 * Math.PI);
 			ctx.closePath();
-			
 			ctx.strokeStyle = cup.is_hovering ? cup.hover_color : cup.background_color;
 			ctx.lineWidth = cup.radius * 0.1;
 			ctx.stroke();
