@@ -12,8 +12,8 @@ var mancala = (function($){
 		var canvas_unit = canvas.height / 2,
 			cup_radius = canvas_unit * 3 / 8,
 			game = new mancala_board(),
-			p1 = 1,
-			p2 = 2,
+			p1 = new player(1,1,0),
+			p2 = new player(2,1,0),
 			turn = p1,
 			wait = p2,
 			p1_draw_cups = new Array(),
@@ -69,7 +69,7 @@ var mancala = (function($){
 			}
 			//P1 Mancala
 			p1_draw_mancala = {
-				x: canvas_unit * 7 / 2,
+				x: canvas_unit * 15 / 2,
 				y: canvas_unit,
 				radius: cup_radius,
 				points: [
@@ -181,7 +181,48 @@ var mancala = (function($){
 				} else {
 					//
 				}
+				return;
 			}
+			if (turn.kind == 0) { //fix this to player
+				enable_board();
+			} else {
+				var move = turn.chooseMove(game),
+					playAgain = game.makeMove(turn, move);
+				if (!playAgain){
+					swap_turns();
+				}
+				resetStones();
+				continueGame();
+			}
+		}
+		function swap_turns(){
+			var temp = turn;
+			turn = wait;
+			wait = temp;
+			//MORE STATUS STUFF 
+		}
+		function resetStones(){
+			//Put top stones on
+			ctx.font = 'normal ' + canvas_unit / 4 + 'px sans-serif';
+			ctx.textBaseline = "middle";
+			ctx.textAlign = "center";
+			for(var i = 0; i < game.P2Cups.length; i += 1){
+				var index = (game.P2Cups.length - i) - 1;
+				clearCup(p2_draw_cups[index]);
+				//put numbers in the stones
+				ctx.fillText(game.P2Cups[i],p2_draw_cups[index].x, p2_draw_cups[index].y);
+				//throw new Error("Something went badly wrong!");
+				clearCup(p1_draw_cups[i]);
+				ctx.fillText(game.P1Cups[i],p1_draw_cups[i].x, p1_draw_cups[i].y);
+			}
+			clearCup(p1_draw_mancala);
+			ctx.fillText(game.scoreCups[0],p1_draw_mancala.x, p1_draw_mancala.y);
+			clearCup(p2_draw_mancala);
+			ctx.fillText(game.scoreCups[1],p2_draw_mancala.x, p2_draw_mancala.y);
+		}
+		function clearCup(cup){
+			var s = canvas_unit / 5;
+			ctx.clearRect(cup.x - s, cup.y - s, 2 * s, 2 * s);
 		}
 	},
 //=================Main function==========================
@@ -205,16 +246,17 @@ var mancala = (function($){
 			} else {
 				cups = this.P2Cups;
 			}
-			return cup > 0 && cup <= len(cups) && cups[cup - 1] > 0;
+			return cup > 0 && cup <= cups.length && cups[cup - 1] > 0;
 		}
 		legal_moves(player){
+			var cups, moves;
 			if (player.num == 1) {
 				cups = this.P1Cups;
 			} else {
 				cups = this.P2Cups;
 			}
 			moves = new Array();
-			for(var i = 0; i < length(cups); i += 1){
+			for(var i = 0; i < cups.length; i += 1){
 				if (cups[i] != 0)
 					moves.push(i + 1);
 			}
@@ -223,11 +265,11 @@ var mancala = (function($){
 		makeMove(player, cup){
 			var again = this.makeMoveHelp(player, cup);
 			if (this.game_over()){
-				for(var i = 0; i < length(cups); i += 1){
+				for(var i = 0; i < this.P1Cups.length; i += 1){
 					this.scoreCups[0] += this.P1Cups[i];
 					this.P1Cups[i] = 0;
 				}
-				for(var i = 0; i < length(cups); i += 1){
+				for(var i = 0; i < this.P2Cups.length; i += 1){
 					this.scoreCups[1] += this.P2Cups[i];
 					this.P2Cups[i] = 0;
 				}
@@ -238,6 +280,7 @@ var mancala = (function($){
 
 		}
 		makeMoveHelp(player, cup){
+			var cups, opp_cups;
 			if (player.num == 1) {
 				cups = this.P1Cups;
 				opp_cups = this.P2Cups; 
@@ -247,12 +290,12 @@ var mancala = (function($){
 			}
 			var init_cups = cups,
 				nstones = cups[cup - 1];
-			cup[cup - 1] = 0;
+			cups[cup - 1] = 0;
 			cup += 1;
 			var playAgain = false;
 			while (nstones > 0) {
 				playAgain = false;
-				while (cup <= length(cups) && nstones > 0) {
+				while (cup <= cups.length && nstones > 0) {
 					cups[cup - 1] += 1;
 					nstones = nstones - 1;
 					cup += 1;
@@ -261,9 +304,9 @@ var mancala = (function($){
 					break;
 				}
 				if (cups == init_cups) {
-					self.scoreCups[player.num - 1] += 1
+					this.scoreCups[player.num - 1] += 1
 					nstones -= 1;
-					playAgain = True;
+					playAgain = true;
 				}
 				//Switch sides
 				var temp_cups = cups;
@@ -299,7 +342,7 @@ var mancala = (function($){
 		}
 		game_over(){
 			var over = true;
-			for(var i = 0; i < length(this.P1Cups); i += 1){
+			for(var i = 0; i < this.P1Cups.length; i += 1){
 				if (this.P1Cups[i] != 0){
 					over = false;
 					break;
@@ -309,13 +352,44 @@ var mancala = (function($){
 				return true;
 			}
 			over = true;
-			for(var i = 0; i < length(this.P2Cups); i += 1){
+			for(var i = 0; i < this.P2Cups.length; i += 1){
 				if (this.P2Cups[i] != 0){
 					over = false;
 					break;
 				}
 			}
 			return over;
+		}
+	}
+	class player {
+		constructor(player_num, player_type, ply){
+			this.num = player_num;
+			this.opp = 2 - player_num + 1;
+			this.kind = player_type;
+			this.ply = ply;
+		}
+		minimaxMove(){
+			console.log('5');
+		}
+		maxValue(){
+			console.log('5');
+		}
+		score(board){
+			if (board.hasWon(this.num)){
+				return 100.0;
+			} else if (board.hasWon(this.opp)){
+				return 0.0;
+			} else {
+				return 50.0;
+			}
+		}
+		chooseMove(board) {
+			if (this.kind == 0) {
+
+			} else if (this.kind == 1) {
+				var moves = board.legal_moves(this);
+				return moves[Math.floor(Math.random() * moves.length)];
+			}
 		}
 	}
 	return {
