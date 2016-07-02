@@ -205,7 +205,9 @@ def startGame(p1, p2):
 def main():
     playerHuman = ssy503.ssy503(1, ssy503.Player.HUMAN)
     playerAI = ssy503.ssy503(2, ssy503.Player.ABPRUNE,9)
-    startGame(playerHuman,playerAI)
+    # playerAI = ssy503.ssy503(2, ssy503.Player.HUMAN)
+    # startGame(playerHuman,playerAI)
+    startGame(playerAI,playerHuman)
 
 if __name__ == '__main__':
     main()

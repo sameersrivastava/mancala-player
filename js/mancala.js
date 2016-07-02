@@ -1,13 +1,17 @@
 var mancala = (function($){
 	"use strict";
-	var mancala_window = function(){
+	var selected_move = -1,
+		num_moves = 0,
+		mancala_window = function(){
 		// Create the canvas
 		var canvas = document.createElement("canvas"),
 			ctx = canvas.getContext("2d");
 		//Appened canvas to body
 		canvas.width = $('#container').width();
 		canvas.height = $('#container').width()/4;
+		canvas.setAttribute("id","board");
 		$('#container').append(canvas);
+
 		//Set drawing units and players
 		var canvas_unit = canvas.height / 2,
 			cup_radius = canvas_unit * 3 / 8,
@@ -83,6 +87,7 @@ var mancala = (function($){
 			drawBoard();
 			//Make Status
 			$('#container').append('<div id="game-status"></div>');
+			$('#game-status').text('Player\'s ' + turn.num + ' turn');
 			//Make the new game button
 			$('#container').append('<button id="game-button" type="button">Start New Game</button>');
 			$('#game-button').click(function() {
@@ -186,6 +191,8 @@ var mancala = (function($){
 				}
 				return;
 			}
+			num_moves += 1;
+			console.log('num_moves: ' + num_moves);
 			if (turn.kind == 0) { //fix this to player
 				enable_board();
 			} else {
@@ -202,6 +209,8 @@ var mancala = (function($){
 			var temp = turn;
 			turn = wait;
 			wait = temp;
+			$('#game-status').text('Player\'s ' + turn.num + ' turn');
+			console.log('here ' + turn.num);
 			//MORE STATUS STUFF 
 		}
 		function resetStones(){
@@ -229,15 +238,16 @@ var mancala = (function($){
 		}
 		function enable_board(){
 			//Bind buttons to each mancala
-			var selection = function(move){
-				$('canvas').unbind('click',selection);
-				$('canvas').unbind('mousemove',enable);		
-				var playAgain = game.makeMove(turn, move);
-				if (!playAgain){
-					swap_turns();
+			var selection = function(){
+				if (selected_move >= 0) { 	
+					var playAgain = game.makeMove(turn, (selected_move + 1));
+					if (!playAgain){
+						swap_turns();
+					}
+					resetStones();
+					setTimeout(continueGame,2000);
+					$('canvas').unbind('mousemove',enable);
 				}
-				resetStones();
-				setTimeout(continueGame,1000);
 			},
 			enable = function (event) {
 				var offset = $(this).offset(),
@@ -264,8 +274,16 @@ var mancala = (function($){
 								p1_draw_cups[cup_index].is_hovering=true;
 								draw_circle(p1_draw_cups[cup_index]);
 							}
-							$('canvas').click(selection(cup_index));
+							// $('canvas').click(selection(cup_index));
+							// $('canvas').dbclick(selection(cup_index));
+							
+							// $('#board').bind('click',selection(cup_index));
+							selected_move = cup_index;
+							// console.log(selected_move);
+
 						} else {
+							selected_move = -1;
+							// console.log(selected_move);
 							// change to blurcolor if previously inside
 							for(var i = 0; i < p1_draw_cups.length; i++){
 								if(p1_draw_cups[i].is_hovering){
@@ -274,14 +292,15 @@ var mancala = (function($){
 									
 								}
 							}
-							$('canvas').unbind('click',selection);
+							// $('canvas').unbind('click',selection);
 						}
 					}
 				} else {
 
 				}
 			}
-			$('canvas').mousemove(enable);		
+			$('canvas').mousemove(enable);	
+			$('#board').click(selection);
 		}
 		function draw_circle(cup){
 			ctx.beginPath();				
