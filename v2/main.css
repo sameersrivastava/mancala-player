@@ -24,6 +24,12 @@
 	font-size:1.5em;
 	padding-top: 15px; 
 }
+.row-pit .pit.player-1{
+	cursor: pointer;
+}
+.row-pit .pit.player-2{
+	cursor: not-allowed;
+}
 
 .player-icon{
 	font-size: 3.5em;
