@@ -1,6 +1,6 @@
 .row-board{
 	height:200px;
-	margin-top: 90px;
+	margin-top: 20px;
 }
 .mancala{
 	border-radius: 70px;
@@ -57,8 +57,8 @@
 .rectangle-speech-border {
   position:relative;
   padding:50px 15px;
-  margin:1em 0 3em;
-  border:10px solid #5a8f00;
+  margin-top: 20px;
+  border:3px solid #000000;
   text-align:center;
   color:#333;
   background:#fff;
@@ -73,18 +73,18 @@
   content:"";
   position:absolute;
   z-index:10;
-  bottom:-40px;
-  left:50px;
-  width:50px;
+  bottom:-30px;
+  left:60px;
+  width:30px;
   height:30px;
   border-style:solid;
-  border-width:0 10px 10px 0;
-  border-color:#5a8f00;
+  border-width:0 3px 3px 0;
+  border-color:#000000;
   background:transparent;
   /* css3 */
-  -webkit-border-bottom-right-radius:80px 50px;
-  -moz-border-radius-bottomright:80px 50px;
-  border-bottom-right-radius:80px 50px;
+  -webkit-border-bottom-right-radius:80px 70px;
+  -moz-border-radius-bottomright:80px 70px;
+  border-bottom-right-radius:80px 70px;
   /* reduce the damage in FF3.0 */
   display:block;
 }
@@ -94,18 +94,18 @@
   content:"";
   position:absolute;
   z-index:10;
-  bottom:-40px;
-  left:50px;
-  width:20px;
+  bottom:-30px;
+  left:60px;
+  width:10px;
   height:30px;
   border-style:solid;
-  border-width:0 10px 10px 0;
-  border-color:#5a8f00;
+  border-width:0 3px 3px 0;
+  border-color: #000000;
   background:transparent;
   /* css3 */
-  -webkit-border-bottom-right-radius:40px 50px;
-  -moz-border-radius-bottomright:40px 50px;
-  border-bottom-right-radius:40px 50px;
+  -webkit-border-bottom-right-radius:40px 60px;
+  -moz-border-radius-bottomright:40px 60px;
+  border-bottom-right-radius:40px 60px;
   /* reduce the damage in FF3.0 */
   display:block;
 }
@@ -114,15 +114,15 @@
 .rectangle-speech-border > :first-child:before {
   content:"";
   position:absolute;
-  bottom:-40px;
-  left:45px;
-  width:10px;
-  height:10px;
-  background:#5a8f00;
+  bottom:-30px;
+  left:58px;
+  width:3px;
+  height:3px;
+  background:#000000;
   /* css3 */
-  -webkit-border-radius:10px;
-  -moz-border-radius:10px;
-  border-radius:10px;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border-radius:3px;
 }
 
 /* creates a white rectangle to cover part of the oval border*/
