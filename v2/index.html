@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Add in Bootstrap & jQuery -->
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<!-- Add in Bootstrap & jQuery -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
- <!-- Add Font Awesome -->
- <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+	 <!-- Add Font Awesome -->
+	 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
 
-<!-- Stylesheet -->
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
- <link rel="stylesheet" type="text/css" href="main.css" />
+	<!-- Stylesheet -->
 
+	<link rel="stylesheet" type="text/css" href="main.css" />
 </head>
 <body>
 
 <div class="container-fluid">
 	<!-- Code from http://nicolasgallagher.com/pure-css-speech-bubbles/demo/ -->
-	<blockquote class="rectangle-speech-border col-xs-offset-1 col-xs-10">
-		<p>This is a blockquote that is styled to look like a speech bubble</p>
-    </blockquote>
+	<p class="chat-bubble col-xs-offset-1 col-xs-10">
+		Do you want to play?
+		<button type="button" class="btn btn-success">Yes</button>
+		<button type="button" class="btn btn-danger">No</button>
+
+    </p>
     <div class="clearfix"></div>
 	<div class="row row-board">
 		<!-- AI Player -->

@@ -1,6 +1,6 @@
 .row-board{
 	height:200px;
-	margin-top: 20px;
+	margin-top: 10px;
 }
 .mancala{
 	border-radius: 70px;
@@ -53,86 +53,44 @@
   border-color: #34495e transparent;
 }
 */
-
-.rectangle-speech-border {
+.chat-bubble {
   position:relative;
-  padding:50px 15px;
+  padding:20px;
   margin-top: 20px;
-  border:3px solid #000000;
-  text-align:center;
-  color:#333;
+  border:3px solid #34495e;
+  color:#34495e;
   background:#fff;
   /* css3 */
-  -webkit-border-radius:20px;
-  -moz-border-radius:20px;
-  border-radius:20px;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+  font-size: 1.5em;
+  font-family: 'Roboto', sans-serif;
 }
 
-/* creates larger curve */
-.rectangle-speech-border:before {
+.chat-bubble:before {
   content:"";
   position:absolute;
-  z-index:10;
-  bottom:-30px;
-  left:60px;
-  width:30px;
-  height:30px;
+  bottom:-20px; /* value = - border-top-width - border-bottom-width */
+  left:22px; /* controls horizontal position */
+  border-width:18px 18px 0;
   border-style:solid;
-  border-width:0 3px 3px 0;
-  border-color:#000000;
-  background:transparent;
-  /* css3 */
-  -webkit-border-bottom-right-radius:80px 70px;
-  -moz-border-radius-bottomright:80px 70px;
-  border-bottom-right-radius:80px 70px;
+  border-color:#34495e transparent;
   /* reduce the damage in FF3.0 */
   display:block;
+  width:0;
 }
 
-/* creates smaller curve */
-.rectangle-speech-border:after {
+/* creates the smaller  triangle */
+.chat-bubble:after {
   content:"";
   position:absolute;
-  z-index:10;
-  bottom:-30px;
-  left:60px;
-  width:10px;
-  height:30px;
+  bottom:-15px; /* value = - border-top-width - border-bottom-width */
+  left:25px; /* value = (:before left) + (:before border-left) - (:after border-left) */
+  border-width:15px 15px 0;
   border-style:solid;
-  border-width:0 3px 3px 0;
-  border-color: #000000;
-  background:transparent;
-  /* css3 */
-  -webkit-border-bottom-right-radius:40px 60px;
-  -moz-border-radius-bottomright:40px 60px;
-  border-bottom-right-radius:40px 60px;
+  border-color:#ffffff transparent;
   /* reduce the damage in FF3.0 */
   display:block;
+  width:0;
 }
-
-/* creates a small circle to produce a rounded point where the two curves meet */
-.rectangle-speech-border > :first-child:before {
-  content:"";
-  position:absolute;
-  bottom:-30px;
-  left:58px;
-  width:3px;
-  height:3px;
-  background:#000000;
-  /* css3 */
-  -webkit-border-radius:3px;
-  -moz-border-radius:3px;
-  border-radius:3px;
-}
-
-/* creates a white rectangle to cover part of the oval border*/
-.rectangle-speech-border > :first-child:after {
-  content:"";
-  position:absolute;
-  bottom:-10px;
-  left:70px;
-  width:20px;
-  height:15px;
-  background:#fff;
-}
-
