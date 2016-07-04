@@ -31,7 +31,7 @@ Program Overview:
 var mancala = (function($){
 	var main = function(){
 		
-		var player1 = new player(1, 1),
+		var player1 = new player(1, 0),
 			player2 = new player(2, 1),
 			gui = new mancala_gui(player1, player2);
 		gui.newgame();
@@ -46,11 +46,11 @@ var mancala = (function($){
 		drawBoard(){
 			var self = this;
 			$('.pit.player-1').each(function(index){
-				console.log( index + ": " + $( this ).text() );
+				//console.log( index + ": " + $( this ).text() );
 				$(this).text(self.game.p1_cups[index]); 
 			});
 			$($('.pit.player-2').get().reverse()).each(function(index){
-				console.log( index + ": " + $( this ).text() );
+				//console.log( index + ": " + $( this ).text() );
 				$(this).text(self.game.p2_cups[index]); 
 			});
 			$('.mancala.player-1').text(self.game.score_cups[0]);
@@ -81,7 +81,7 @@ var mancala = (function($){
                 	$('.chat-bubble').text('It is a tie!');
             	return
             }
-        	if (this.turn.type == 2) {
+        	if (this.turn.type == 0) {
             	this.enableBoard();
         	} else {
             	move = this.turn.chooseMove(this.game);
@@ -96,11 +96,29 @@ var mancala = (function($){
            		this.drawBoard();
            	}
 		}
+		enableBoard(){
+			var self = this;
+			$('.pit.player-1').click(function(){
+				var moveAgain,
+					id = parseInt($(this).attr('id').substring(4,5));
+				if(self.game.isLegalMove(self.turn,id)) {
+					moveAgain = self.game.makeMove(self.turn, id);
+					if(!moveAgain){
+						var temp = self.turn
+        				self.turn = self.wait
+        				self.wait = temp
+					}
+					self.drawBoard();
+				}
+
+			});
+		}
 		swapTurns(){
 			var temp = this.turn
         	this.turn = this.wait
         	this.wait = temp
 		}
+
 	}
 	//Game Logic
 	class mancala_board{
@@ -115,6 +133,7 @@ var mancala = (function($){
 		}
 		//Checks if move is legal
 		isLegalMove(player, cup){
+			var cups = [];
 			if (player.num == 1){
 				cups = this.p1_cups;
 			} else {
