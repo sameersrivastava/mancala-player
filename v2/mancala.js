@@ -71,11 +71,14 @@ var mancala = (function($){
 			var move, playAgain;
 			if (this.game.gameOver()) {
             	if (this.game.hasWon(this.p1.num)){
-                	this.status = "Player " + this.p1 + " wins";
+                	// this.status = "Player " + this.p1 + " wins";
+                	$('.chat-bubble').text('Player 1 wins!');
             	} else if (this.game.hasWon(this.p2.num)){
-                	this.status = "Player " + this.p2 + " wins";
+                	//this.status = "Player " + this.p2 + " wins";
+                	$('.chat-bubble').text('Player 2 wins!');
             	} else
-                	this.status = "Tie game";
+                	// this.status = "Tie game";
+                	$('.chat-bubble').text('It is a tie!');
             	return
             }
         	if (this.turn.type == 2) {
@@ -84,7 +87,11 @@ var mancala = (function($){
             	move = this.turn.chooseMove(this.game);
             	playAgain = this.game.makeMove(this.turn, move);
             	if (!playAgain) {
-                	this.swapTurns()
+                	// this.swapTurns();
+                	var temp = this.turn
+        			this.turn = this.wait
+        			this.wait = temp
+
             	}
            		this.drawBoard();
            	}
@@ -134,8 +141,11 @@ var mancala = (function($){
 			return moves;
 		}
 		//make the move
-		makeMove(player, cup){
-			var again = this.makeMoveHelp(player, cup);
+		makeMove(player, cup, makeMoveCallback){
+			return this.makeMoveHelp(player, cup);
+			
+		}
+		makeMoveCallback(again){
 			if (this.gameOver()){
 				var i;
 				for(i = 0; i < this.p1_cups.length; i += 1){
@@ -152,7 +162,7 @@ var mancala = (function($){
 			}
 		}
 		//make actual move
-		makeMoveHelp(player, cup){
+		makeMoveHelp(player, cup, cb){
 			var cups = [],
 				opp_cups = [],
 				init_cups = [],
@@ -196,7 +206,7 @@ var mancala = (function($){
 			}
 
 			if (playAgain) {
-				return true;
+				return this.makeMoveCallback(true);
 			}
 
 			//Check to see if landed in a blank space on our side
@@ -208,7 +218,7 @@ var mancala = (function($){
 				this.score_cups[player.num - 1] += 1;
 				cups[cup - 1] = 0;
 			}
-			return false;
+			return this.makeMoveCallback(false);
 		}
 		hasWon(player_num){
 			var opp;
