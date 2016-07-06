@@ -27,6 +27,11 @@
 .row-pit .pit.player-1{
 	cursor: pointer;
 }
+.row-pit .pit.player-1:hover{
+	background-color: #ecf0f1;
+	font-weight: bold;
+	padding-top: 16px;
+}
 .row-pit .pit.player-2{
 	cursor: not-allowed;
 }
@@ -99,4 +104,19 @@
   /* reduce the damage in FF3.0 */
   display:block;
   width:0;
+}
+.chat-bubble .btn-default{
+	margin: 0px 5px;
+}
+.chat-bubble #btn-p1{
+	color:#ffffff;
+	background-color: #5FADE2; 
+}
+.chat-bubble #btn-p2{
+	color:#ffffff;
+	background-color: #EC7569; 
+}
+.chat-bubble #btn-random{
+	color:#ffffff;
+	background-color: #34495e; 
 }
