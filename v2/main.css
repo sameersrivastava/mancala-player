@@ -105,7 +105,7 @@
   display:block;
   width:0;
 }
-.chat-bubble .btn-default{
+.chat-bubble .btn{
 	margin: 0px 5px;
 }
 .chat-bubble #btn-p1{
