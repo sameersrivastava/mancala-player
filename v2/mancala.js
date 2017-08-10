@@ -103,47 +103,47 @@ var mancala = (function($){
 		continueGame(){
 			var move, playAgain;
 			if (this.game.gameOver()) {
-            	if (this.game.hasWon(1)){
-                	// this.status = "Player " + this.p1 + " wins";
-                	$('.chat-bubble').html('You win!' +
-                		' Play me again?' + 
-                		'<button type="button" class="btn btn-success">Yes</button>' +
+				if (this.game.hasWon(1)){
+					// this.status = "Player " + this.p1 + " wins";
+					$('.chat-bubble').html('You win!' +
+						' Play me again?' + 
+						'<button type="button" class="btn btn-success">Yes</button>' +
 						'<button type="button" class="btn btn-danger">No</button>'	
-                	);
-                	main();
-            	} else if (this.game.hasWon(2)){
-                	//this.status = "Player " + this.p2 + " wins";
-                	$('.chat-bubble').html('I win!' +
-                		' Play me again?' + 
-                		'<button type="button" class="btn btn-success">Yes</button>' +
+					);
+					main();
+				} else if (this.game.hasWon(2)){
+					//this.status = "Player " + this.p2 + " wins";
+					$('.chat-bubble').html('I win!' +
+						' Play me again?' + 
+						'<button type="button" class="btn btn-success">Yes</button>' +
 						'<button type="button" class="btn btn-danger">No</button>'
 					);
 					main();
-            	} else {
-                	// this.status = "Tie game";
-                	$('.chat-bubble').html('It is a tie!' +
-                		' Play me again?' + 
-                		'<button type="button" class="btn btn-success">Yes</button>' +
+				} else {
+					// this.status = "Tie game";
+					$('.chat-bubble').html('It is a tie!' +
+						' Play me again?' + 
+						'<button type="button" class="btn btn-success">Yes</button>' +
 						'<button type="button" class="btn btn-danger">No</button>'
 					);
 					main();
-                }
-            }
-        	if (this.turn.type == 0) {
-            	this.enableBoard();
-        	} else {
-            	move = this.turn.chooseMove(this.game);
-            	playAgain = this.game.makeMove(this.turn, move);
-            	if (!playAgain) {
-                	// this.swapTurns();
-                	console.log('Turn swap');
-                	var temp = this.turn
-        			this.turn = this.wait
-        			this.wait = temp
+				}
+			}
+			if (this.turn.type == 0) {
+				this.enableBoard();
+			} else {
+				move = this.turn.chooseMove(this.game);
+				playAgain = this.game.makeMove(this.turn, move);
+				if (!playAgain) {
+					// this.swapTurns();
+					console.log('Turn swap');
+					var temp = this.turn
+					this.turn = this.wait
+					this.wait = temp
 
-            	}
-           		this.drawBoard();
-           	}
+				}
+				this.drawBoard();
+			}
 		}
 		enableBoard(){
 			// $('.chat-bubble').text('Your turn');
@@ -155,8 +155,8 @@ var mancala = (function($){
 					moveAgain = self.game.makeMove(self.turn, id);
 					if(!moveAgain){
 						var temp = self.turn
-        				self.turn = self.wait
-        				self.wait = temp
+						self.turn = self.wait
+						self.wait = temp
 					}
 					self.drawBoard();
 				}
@@ -165,8 +165,8 @@ var mancala = (function($){
 		}
 		swapTurns(){
 			var temp = this.turn
-        	this.turn = this.wait
-        	this.wait = temp
+			this.turn = this.wait
+			this.wait = temp
 		}
 
 	}
